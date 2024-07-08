@@ -1,13 +1,19 @@
 import express, { Request, Response } from 'express';
-import cors from 'cors';
+import 'reflect-metadata';
+import { AppDataSource } from '../database/data-source';
+import routes from './routes';
 
 const app = express();
 
-app.use(express.json());
-app.use(cors());
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello, World!');
+});
 
-app.get('/coffee', (_req: Request, res: Response) =>
-  res.status(200).json('retorno concluido'),
-);
+app.use(express.json());
+app.use(routes);
+
+AppDataSource.initialize()
+  .then(async () => {})
+  .catch((error) => console.log(error));
 
 export default app;
